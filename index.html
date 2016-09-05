@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Thorlabs Software Team</title>
+
+        <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body  style="background:#C8FFA1;">
+
+  <div style="margin-left:300px ;margin-right:300px">
+  <h3>排班表</h3>
+  <h4 id="DateDisp"></h4>
+  <h4 id="WeekDisp"></h4>
+  <table class="table"  >
+      <thead >
+          <tr>
+              <th>洗碗</th>
+              <th>洗碗</th>
+              <th>煮饭</th>
+              <th>外卖</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr id="Row1">
+              <td >York</td>
+              <td >Jetty</td>
+              <td>Eason</td>
+              <td>yFu</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+    <div style="margin-left:300px ;margin-right:300px">
+    <h4>Char Room</h4>
+    <h4 id="ConnectUSer"></h4>
+  <ul id="messages"></ul>
+    <form action="">
+    <input id= "name"placeholder= "please input your name" />
+      <input id="m" autocomplete="off" />
+    <button  class="btn btn-default">Send</button>
+    </form>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+     <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+     // var socket = io();
+     var socket = io.connect('http://chn-vm-70',{'sync disconnect on unload': true });
+      $('form').submit(function(){
+         socket.emit('chat message', $('#name').val()+" says: " + $('#m').val());
+         $('#m').val('');
+         return false;
+       });
+       socket.on('chat message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+        });
+        socket.on('ClientNumber',function(msg){
+            $('#ConnectUSer').text("当前在线人数 ："+msg);
+        })
+    </script>
+<script>
+    $(document).ready(function() {
+        $.get('GetRangement',function(data){
+        console.log(data);
+            var obj = JSON.parse(data);
+            $('#Row1').children('td').eq(0).text(obj.col1);
+            $('#Row1').children('td').eq(1).text(obj.col2);
+            $('#Row1').children('td').eq(2).text(obj.col3);
+            $('#DateDisp').text("当前日期： "+obj.CurrentDate);
+            $('#WeekDisp').text("当前周数： "+obj.CurrentWeek);
+        });
+    });
+</script>
+  </body>
+</html>
