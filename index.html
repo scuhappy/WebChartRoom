@@ -41,7 +41,7 @@
   </table>
 </div>
     <div style="margin-left:300px ;margin-right:300px">
-    <h4>Char Room</h4>
+    <h4>Chart Room</h4>
     <h4 id="ConnectUSer"></h4>
   <ul id="messages"></ul>
     <form action="">
@@ -57,8 +57,7 @@
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-     // var socket = io();
-     var socket = io.connect('http://chn-vm-70',{'sync disconnect on unload': true });
+      var socket = io();
       $('form').submit(function(){
          socket.emit('chat message', $('#name').val()+" says: " + $('#m').val());
          $('#m').val('');

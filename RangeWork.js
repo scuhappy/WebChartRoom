@@ -40,7 +40,12 @@ app.get('/GetRangement',function(req,res){
    var obj={'CurrentDate':moment().format('YYYY-MM-DD'),'CurrentWeek':curWeek,'col1':Persons[0],'col2':Persons[1],'col3':Persons[2]};
   res.end(JSON.stringify(obj));
 });
-
+function getClientIp(req) {
+        return req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+    };
 var server = app.listen(80,"10.15.10.166", function () {
     var host = server.address().address;
     var port = server.address().port;
@@ -50,12 +55,12 @@ var server = app.listen(80,"10.15.10.166", function () {
 var io = require('socket.io')(server);
 var UserCount = 0;
 io.on('connection', function(socket){
-       console.log('a user connected');
+       console.log('a user connected ip : '+socket.handshake.address);
        UserCount++;
        io.emit('ClientNumber',io.engine.clientsCount);
-//    console.log(io.rooms.length);
     socket.on('chat message', function(msg){
-        console.log('message: ' + msg);
+        msg=socket.handshake.address+" "+msg;
+        console.log('message: ' +msg);
          io.emit('chat message', msg);
       });
     io.on('disconnect',function(socket){
