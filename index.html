@@ -43,13 +43,20 @@
     <div style="margin-left:300px ;margin-right:300px">
     <h4>Chart Room</h4>
     <h4 id="ConnectUSer"></h4>
-  <ul id="messages"></ul>
+  <ul id="messages" class="list-group" style="background:#FFF5E5"></ul>
     <form action="">
     <input id= "name"placeholder= "please input your name" />
       <input id="m" autocomplete="off" />
     <button  class="btn btn-default">Send</button>
     </form>
     </div>
+    <!--
+    <div id="MsgBoard" style="float:left;margin-left :30px;">
+    <ul  id= "MsgBoardList"class="list-group" ></ul>
+    <input id= "LeaveMsg" placeholder = "Leave Message here"/>
+    <button class="btn btn-default">SendMsg</button>
+    </div>
+    -->
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -64,7 +71,7 @@
          return false;
        });
        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
+          $('#messages').append($("<li class='list-group-item'></li>").text(msg));
         });
         socket.on('ClientNumber',function(msg){
             $('#ConnectUSer').text("当前在线人数 ："+msg);

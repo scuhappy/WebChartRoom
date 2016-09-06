@@ -1,0 +1,40 @@
+{
+  "name": "selftest",
+  "version": "1.0.0",
+  "description": "mytestprogram",
+  "main": "RangeWork.js",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "fileinput": "^4.3.5",
+    "cookie-parser": "^1.4.3",
+    "body-parser": "^1.15.2",
+    "moment": "^2.14.1",
+    "mongodb": "^2.2.5",
+    "jquery": "^3.1.0",
+    "mongoose": "^4.5.8",
+    "multer": "^1.2.0",
+    "nodemailer": "^2.5.0",
+    "summernote": "^0.8.2",
+    "socket.io": "^1.4.8",
+    "windows-shortcuts": "^0.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scuhappy/WebChartRoom.git"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "YorkChen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scuhappy/WebChartRoom/issues"
+  },
+  "homepage": "https://github.com/scuhappy/WebChartRoom#readme"
+}

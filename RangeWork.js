@@ -9,6 +9,25 @@ var cookieParser = require('cookie-parser');
 var multer  = require('multer');
 var urlencodeParser = bodyParser.urlencoded({extended: true});
 
+var mongoose = require('mongoose');
+var ObjectId = require('mongoose').Types.ObjectId;
+var DBTesturl = 'mongodb://localhost:27017/Test';
+var dbTest = mongoose.connect(DBTesturl,function(err){
+    if(!err)
+    {
+        console.log("Connect to DB Successfully!");
+    }else{
+        console.log("Error to connect to DB");
+    }
+});
+var Schema = mongoose.Schema;
+var MsgBoardScheMa = new Schema({
+                                    UserName: String,
+                                    Date:String,
+                                    Message: String
+
+                                });
+
 app.use(cookieParser());
 app.use(express.static(__dirname + '/'));
 app.use(bodyParser.urlencoded({extended:false}));
