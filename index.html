@@ -43,12 +43,18 @@
     <div style="margin-left:300px ;margin-right:300px">
     <h4>Chart Room</h4>
     <h4 id="ConnectUSer"></h4>
-  <ul id="messages" class="list-group" style="background:#FFF5E5"></ul>
-    <form action="">
-    <input id= "name"placeholder= "please input your name" />
-      <input id="m" autocomplete="off" />
-    <button  class="btn btn-default">Send</button>
-    </form>
+    <h5>目前的聊天记录会保存一天</h5>
+    <h5>加入了聊天弹窗功能</h5>
+    <h5>加入了插入代码功能<h5>
+    <div style= "overflow-y:auto; overflow-x:auto;  height:400px; background:#FFF5E5">
+  <ul id="messages" class="list-group"></ul>
+  </div>
+    <div style="margin-top:20px;">
+    <input id= "UserName "   class="form-control" placeholder= "please input your name" />
+     <textarea id="m" autocomplete="off"  class="form-control" style="margin-top:5px;" ></textarea>
+    <button  class="btn btn-default" onclick="SendMsg('Msg')" style="margin-top:5px;" >Send as Message</button>
+     <button  class="btn btn-default" onclick="SendMsg('Code')" style="margin-top:5px;" >Send as Code</button>
+    </div>
     </div>
     <!--
     <div id="MsgBoard" style="float:left;margin-left :30px;">
@@ -65,14 +71,52 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
-      $('form').submit(function(){
-         socket.emit('chat message', $('#name').val()+" says: " + $('#m').val());
+      var SendMsg = function(type)
+      {
+      var Input =$('input').eq(0).val()
+        var Chartobj = {'Name':Input,'Content':$('#m').val(),'Type':type};
+         socket.emit('chat message', JSON.stringify(Chartobj));
          $('#m').val('');
          return false;
-       });
+      }
        socket.on('chat message', function(msg){
-          $('#messages').append($("<li class='list-group-item'></li>").text(msg));
+        var Obj = JSON.parse(msg);
+        var IP = Obj.IP ;
+        var Time = Obj.Time;
+        var Name = Obj.Name;
+        var Content = Obj.Content;
+        if(Obj.Type == "Msg")
+        {
+          var msg = Time + "      "+IP+"      "+Name+"        says: "+Content;
+           var Title = $("<label></label>").text(msg);
+          $('#messages').append($("<li class='list-group-item'></li>").append(Title));
+          }else{
+           var msg = Time + "      "+IP+"      "+Name+":";
+          var Pre = $("<pre ></pre>").text(Content);
+          var Title = $("<label></label>").text(msg);
+          var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
+          $('#messages').append(Row.append(Pre));
+         }
         });
+        socket.on('init message',function(msg){
+        var Obj = JSON.parse(msg);
+        var IP = Obj.IP ;
+        var Time = Obj.Time;
+        var Name = Obj.Name;
+        var Content = Obj.Content;
+        if(Obj.Type == "Msg")
+        {
+          var msg = Time + "      "+IP+"      "+Name+"        says: "+Content;
+           var Title = $("<label></label>").text(msg);
+          $('#messages').append($("<li class='list-group-item'></li>").append(Title));
+          }else{
+           var msg = Time + "      "+IP+"      "+Name+":";
+          var Pre = $("<pre ></pre>").text(Content);
+          var Title = $("<label></label>").text(msg);
+          var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
+          $('#messages').append(Row.append(Pre));
+         }
+    })
         socket.on('ClientNumber',function(msg){
             $('#ConnectUSer').text("当前在线人数 ："+msg);
         })
@@ -89,6 +133,24 @@
             $('#WeekDisp').text("当前周数： "+obj.CurrentWeek);
         });
     });
+</script>
+
+<script>
+    function showNotification (Content) {
+        window.Notification.permission = "granted";
+        //alert(window.Notification.permission);
+        if (window.Notification){
+            if (window.Notification.permission == "granted") {
+                var notification = new Notification("New Message", {
+                    body: Content,
+                    icon: ""
+                });
+                setTimeout(function(){notification.close();},5000);
+            } else {
+                window.Notification.requestPermission();
+            }
+        }else alert('你的浏览器不支持此消息提示功能，请使用chrome内核的浏览器！');
+    };
 </script>
   </body>
 </html>

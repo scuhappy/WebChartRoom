@@ -40,12 +40,9 @@ app.get('/GetRangement',function(req,res){
    // var curDate = new Date();
     var start = moment("2016-09-04").week();
     var curWeek = moment().week();
-    console.log("start week : " +start);
-    console.log("current week : "+curWeek);
     var durWeek =curWeek- start;
     var tmp = durWeek%3;
 
-    console.log("dur week :"+ durWeek);
     for(var i=0;i<tmp;i++)
     {
         var last = Persons[Persons.length-1];
@@ -73,14 +70,23 @@ var server = app.listen(80,"10.15.10.166", function () {
 })
 var io = require('socket.io')(server);
 var UserCount = 0;
+var CharList = [];
 io.on('connection', function(socket){
        console.log('a user connected ip : '+socket.handshake.address);
        UserCount++;
        io.emit('ClientNumber',io.engine.clientsCount);
+        for(var i = 0;i< CharList.length;i++)
+        {
+            socket.emit('init message', CharList[i]);
+        }
+
     socket.on('chat message', function(msg){
-        msg=socket.handshake.address+" "+msg;
-        console.log('message: ' +msg);
-         io.emit('chat message', msg);
+        var chartObj = JSON.parse(msg);
+        chartObj.IP =  socket.handshake.address;
+        chartObj.Time = moment().format('HH:mm:ss');
+        CharList [CharList.length] = JSON.stringify(chartObj);
+        console.log('message: ' +JSON.stringify(chartObj));
+         io.emit('chat message', JSON.stringify(chartObj));
       });
     io.on('disconnect',function(socket){
         console.log("disconnect!") ;
