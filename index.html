@@ -47,10 +47,9 @@
   <ul id="messages" class="list-group"></ul>
   </div>
     <div style="margin-top:20px;">
-    <input id= "UserName "   class="form-control" placeholder= "Input your name here" />
-     <textarea id="m" autocomplete="off"  class="form-control" style="margin-top:5px;" onkeydown="keySend(event);" placeholder="Press Shfit+Enter to start a new line "></textarea>
-    <button  class="btn btn-default" onclick="SendMsg('Msg')" style="margin-top:5px;" >Send as Message</button>
-     <button  class="btn btn-default" onclick="SendMsg('Code')" style="margin-top:5px;" >Send as Code</button>
+    <input id= "UserName "   class="form-control" placeholder= "Input your name here"  />
+     <textarea id="m" autocomplete="off"  class="form-control" style="margin-top:5px;resize:none;" onkeydown="keySend(event);" placeholder="Press Shfit+Enter to start a new line "></textarea>
+    <button  class="btn btn-default" onclick="Send()" style="margin-top:5px;float:right;width:100px;" >Send</button>
     </div>
     </div>
     <!--
@@ -68,6 +67,24 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
+      function keySend(event) {
+      if ((!event.shiftKey) && event.keyCode == 13) {
+          event.preventDefault();
+          console.log("Event code : "+event.keyCode);
+          Send();
+      }
+      }
+      var Send = function()
+      {
+          var content = $('#m').val();
+          if(content.indexOf('\n')>=0)//has new line
+          {
+               SendMsg('Code');
+          }else
+          {
+              SendMsg('Msg');
+          }
+      }
       var SendMsg = function(type)
       {
       var Input =$('input').eq(0).val();
@@ -137,14 +154,7 @@
             $('#WeekDisp').text("当前周数： "+obj.CurrentWeek);
         });
     });
-    function keySend(event) {
 
-    if ((!event.shiftKey) && event.keyCode == 13) {
-        event.preventDefault();
-        console.log("Event code : "+event.keyCode);
-        SendMsg('Msg');
-    }
-    }
 </script>
 
 <script>
