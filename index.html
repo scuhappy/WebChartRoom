@@ -70,7 +70,7 @@
       var socket = io();
       var SendMsg = function(type)
       {
-      var Input =$('input').eq(0).val()
+      var Input =$('input').eq(0).val();
         var Chartobj = {'Name':Input,'Content':$('#m').val(),'Type':type};
          socket.emit('chat message', JSON.stringify(Chartobj));
          $('#m').val('');
@@ -93,6 +93,11 @@
           var Title = $("<label></label>").text(msg);
           var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
           $('#messages').append(Row.append(Pre));
+         }
+         console.log("msg name : "+ Name+"cur name : "+$('input').eq(0).val());
+         if(Name!=$('input').eq(0).val())
+         {
+            showNotification(Name,Content);
          }
          $('#ChartRoom').scrollTop( $('#ChartRoom')[0].scrollHeight );
         });
@@ -143,12 +148,12 @@
 </script>
 
 <script>
-    function showNotification (Content) {
+    function showNotification (Name,Content) {
         window.Notification.permission = "granted";
         //alert(window.Notification.permission);
         if (window.Notification){
             if (window.Notification.permission == "granted") {
-                var notification = new Notification("New Message", {
+                var notification = new Notification(Name, {
                     body: Content,
                     icon: ""
                 });
