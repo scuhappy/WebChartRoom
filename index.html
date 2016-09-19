@@ -43,15 +43,12 @@
     <div style="margin-left:300px ;margin-right:300px">
     <h4>Chart Room</h4>
     <h4 id="ConnectUSer"></h4>
-    <h5>目前的聊天记录会保存一天</h5>
-    <h5>加入了聊天弹窗功能</h5>
-    <h5>加入了插入代码功能<h5>
-    <div style= "overflow-y:auto; overflow-x:auto;  height:400px; background:#FFF5E5">
+    <div id="ChartRoom" style= "overflow-y:auto; overflow-x:auto;  height:400px; background:#FFF5E5">
   <ul id="messages" class="list-group"></ul>
   </div>
     <div style="margin-top:20px;">
-    <input id= "UserName "   class="form-control" placeholder= "please input your name" />
-     <textarea id="m" autocomplete="off"  class="form-control" style="margin-top:5px;" ></textarea>
+    <input id= "UserName "   class="form-control" placeholder= "Input your name here" />
+     <textarea id="m" autocomplete="off"  class="form-control" style="margin-top:5px;" onkeydown="keySend(event);" placeholder="Press Shfit+Enter to start a new line "></textarea>
     <button  class="btn btn-default" onclick="SendMsg('Msg')" style="margin-top:5px;" >Send as Message</button>
      <button  class="btn btn-default" onclick="SendMsg('Code')" style="margin-top:5px;" >Send as Code</button>
     </div>
@@ -97,6 +94,7 @@
           var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
           $('#messages').append(Row.append(Pre));
          }
+         $('#ChartRoom').scrollTop( $('#ChartRoom')[0].scrollHeight );
         });
         socket.on('init message',function(msg){
         var Obj = JSON.parse(msg);
@@ -116,6 +114,7 @@
           var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
           $('#messages').append(Row.append(Pre));
          }
+         $('#ChartRoom').scrollTop( $('#ChartRoom')[0].scrollHeight );
     })
         socket.on('ClientNumber',function(msg){
             $('#ConnectUSer').text("当前在线人数 ："+msg);
@@ -133,6 +132,14 @@
             $('#WeekDisp').text("当前周数： "+obj.CurrentWeek);
         });
     });
+    function keySend(event) {
+
+    if ((!event.shiftKey) && event.keyCode == 13) {
+        event.preventDefault();
+        console.log("Event code : "+event.keyCode);
+        SendMsg('Msg');
+    }
+    }
 </script>
 
 <script>
@@ -149,7 +156,7 @@
             } else {
                 window.Notification.requestPermission();
             }
-        }else alert('你的浏览器不支持此消息提示功能，请使用chrome内核的浏览器！');
+        }else alert('Your Bowser does not support this feature, Please use Chrome!');
     };
 </script>
   </body>

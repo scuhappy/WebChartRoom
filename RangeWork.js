@@ -9,10 +9,11 @@ var cookieParser = require('cookie-parser');
 var multer  = require('multer');
 var urlencodeParser = bodyParser.urlencoded({extended: true});
 
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var DBTesturl = 'mongodb://localhost:27017/Test';
-var dbTest = mongoose.connect(DBTesturl,function(err){
+/*var dbTest = mongoose.connect(DBTesturl,function(err){
     if(!err)
     {
         console.log("Connect to DB Successfully!");
@@ -20,6 +21,7 @@ var dbTest = mongoose.connect(DBTesturl,function(err){
         console.log("Error to connect to DB");
     }
 });
+*/
 var Schema = mongoose.Schema;
 var MsgBoardScheMa = new Schema({
                                     UserName: String,
@@ -42,18 +44,18 @@ app.get('/GetRangement',function(req,res){
     var curWeek = moment().week();
     var durWeek =curWeek- start;
     var tmp = durWeek%3;
-
+    var tmpPerson=Persons.concat();
     for(var i=0;i<tmp;i++)
     {
-        var last = Persons[Persons.length-1];
-        for(var j=Persons.length-1;j>0;j--)
+        var last = tmpPerson[tmpPerson.length-1];
+        for(var j=tmpPerson.length-1;j>0;j--)
         {
-            Persons[j]=Persons[j-1];
+            tmpPerson[j]=tmpPerson[j-1];
         }
-        Persons[0]=last;
-        console.log(Persons);
+        tmpPerson[0]=last;
+        console.log(tmpPerson);
     }
-   var obj={'CurrentDate':moment().format('YYYY-MM-DD'),'CurrentWeek':curWeek,'col1':Persons[0],'col2':Persons[1],'col3':Persons[2]};
+   var obj={'CurrentDate':moment().format('YYYY-MM-DD'),'CurrentWeek':curWeek,'col1':tmpPerson[0],'col2':tmpPerson[1],'col3':tmpPerson[2]};
   res.end(JSON.stringify(obj));
 });
 function getClientIp(req) {
@@ -62,7 +64,7 @@ function getClientIp(req) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
     };
-var server = app.listen(80,"10.15.10.166", function () {
+var server = app.listen(80,"10.15.10.188", function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("listen on  http://%s:%s", host, port);
