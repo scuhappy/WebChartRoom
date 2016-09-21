@@ -16,9 +16,14 @@
   </head>
 
   <body  style="background:#C8FFA1;">
-
-  <div style="margin-left:300px ;margin-right:300px">
-  <h3>排班表</h3>
+<div class="row"><!--Row 1-->
+<div class = "col-md-2" style="margin-left:100px;"><!--row1 col1-->
+<h3>Dowloads List</h3>
+<a href = "/Downloads/test.exe"><label>Grab RGB Tool</label></a>
+</div><!--row1 col1-->
+<div class="col-md-offset-1" style="margin-left:0px;" ><!--row 1  col2-->
+  <div style="margin-left:300px ;margin-right:300px" >
+  <h3 >排班表</h3>
   <h4 id="DateDisp"></h4>
   <h4 id="WeekDisp"></h4>
   <table class="table"  >
@@ -52,6 +57,9 @@
     <button  class="btn btn-default" onclick="Send()" style="margin-top:5px;float:right;width:100px;" >Send</button>
     </div>
     </div>
+    </div><!--row1 col2-->
+ </div><!-- Row1-->
+
     <!--
     <div id="MsgBoard" style="float:left;margin-left :30px;">
     <ul  id= "MsgBoardList"class="list-group" ></ul>
@@ -93,51 +101,50 @@
          $('#m').val('');
          return false;
       }
+      var LocalIP = "";
+      socket.on('Client IP', function (msg) {
+          LocalIP = msg;
+      });
        socket.on('chat message', function(msg){
-        var Obj = JSON.parse(msg);
-        var IP = Obj.IP ;
-        var Time = Obj.Time;
-        var Name = Obj.Name;
-        var Content = Obj.Content;
-        if(Obj.Type == "Msg")
-        {
-          var msg = Time + "      "+IP+"      "+Name+"        says: "+Content;
-           var Title = $("<label></label>").text(msg);
-          $('#messages').append($("<li class='list-group-item'></li>").append(Title));
-          }else{
-           var msg = Time + "      "+IP+"      "+Name+":";
-          var Pre = $("<pre ></pre>").text(Content);
-          var Title = $("<label></label>").text(msg);
-          var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
-          $('#messages').append(Row.append(Pre));
-         }
-         console.log("msg name : "+ Name+"cur name : "+$('input').eq(0).val());
-         if(Name!=$('input').eq(0).val())
-         {
-            showNotification(Name,Content);
-         }
-         $('#ChartRoom').scrollTop( $('#ChartRoom')[0].scrollHeight );
-        });
-        socket.on('init message',function(msg){
-        var Obj = JSON.parse(msg);
-        var IP = Obj.IP ;
-        var Time = Obj.Time;
-        var Name = Obj.Name;
-        var Content = Obj.Content;
-        if(Obj.Type == "Msg")
-        {
-          var msg = Time + "      "+IP+"      "+Name+"        says: "+Content;
-           var Title = $("<label></label>").text(msg);
-          $('#messages').append($("<li class='list-group-item'></li>").append(Title));
-          }else{
-           var msg = Time + "      "+IP+"      "+Name+":";
-          var Pre = $("<pre ></pre>").text(Content);
-          var Title = $("<label></label>").text(msg);
-          var Row = $("<li class='list-group-item'></li>").append(Title).append(Pre);
-          $('#messages').append(Row.append(Pre));
-         }
-         $('#ChartRoom').scrollTop( $('#ChartRoom')[0].scrollHeight );
-    })
+           DoWithMsg('chart',msg);
+       });
+       socket.on('init message', function (msg) {
+           DoWithMsg('init',msg);
+       })
+       var DoWithMsg = function (type,msg) {
+           var Obj = JSON.parse(msg);
+           var IP = Obj.IP;
+           var Time = Obj.Time;
+           var Name = Obj.Name;
+           var Content = Obj.Content;
+
+           var Row;
+           console.log("Local IP : " + LocalIP + "msg IP:" + IP);
+           if (LocalIP == IP)//cur user's msg
+           {
+               Row = $("<li class='list-group-item' style='background:#b2e281;'></li>");
+           }
+           else {
+               Row = $("<li class='list-group-item'></li>");
+           }
+           if (Obj.Type == "Msg") {
+               var msg = Time + "      " + IP + "      " + Name + "        says: " + Content;
+               var Title = $("<label></label>").text(msg);
+               $('#messages').append(Row.append(Title));
+           } else {
+               var msg = Time + "      " + IP + "      " + Name + ":";
+               var Pre = $("<pre ></pre>").text(Content);
+               var Title = $("<label></label>").text(msg);
+               $('#messages').append(Row.append(Title).append(Pre));
+           }
+           $('#ChartRoom').scrollTop($('#ChartRoom')[0].scrollHeight);
+           if (type == 'chart') {
+               if (IP != LocalIP) {
+                   showNotification(Name, Content);
+               }
+           }
+       }
+
         socket.on('ClientNumber',function(msg){
             $('#ConnectUSer').text("当前在线人数 ："+msg);
         })

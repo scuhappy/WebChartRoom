@@ -37,6 +37,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 var Persons=['York','Jetty','Eason'];
 var Startdate = new Date();
 Startdate.setFullYear(2016,8,4);//2016.9.4
+
 app.get('/GetRangement',function(req,res){
     console.log("visit date: "+ new Date());
    // var curDate = new Date();
@@ -64,7 +65,7 @@ function getClientIp(req) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
     };
-var server = app.listen(80,"10.15.10.188", function () {
+var server = app.listen(80,"chn-vm-70", function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("listen on  http://%s:%s", host, port);
@@ -76,6 +77,7 @@ var CharList = [];
 io.on('connection', function(socket){
        console.log('a user connected ip : '+socket.handshake.address);
        UserCount++;
+       socket.emit("Client IP", socket.handshake.address);
        io.emit('ClientNumber',io.engine.clientsCount);
         for(var i = 0;i< CharList.length;i++)
         {
