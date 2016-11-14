@@ -17,16 +17,20 @@
 
   <body  style="background:#C8FFA1;">
 <div class="row"><!--Row 1-->
-<div class = "col-md-2" style="margin-left:100px;"><!--row1 col1-->
+<div class = "col-lg-2  col-lg-offset-1" ><!--row1 col1-->
 <h3>Dowloads List</h3>
-<ul>
-<li>
-<a href = "/Downloads/YorkGetRGB.exe" style="color:black;"><u>Grab RGB Tool</u></a>
-</li>
+<ul class="list-group">
+<li class="list-group-item"><a href = "/Downloads/YorkGetRGB.exe" style="color:black;"><u>Grab RGB Tool</u></a></li>
+<li class="list-group-item"><a href = "/Downloads/qt-opensource-windows-x86-winrt-msvc2015-5.7.0.exe" style="color:black;"><u>qt-opensource-windows-x86-winrt-msvc2015-5.7.0</u></a></li>
+<li class="list-group-item"><a href = "/Downloads/qt-vs-addin-msvc2015-2.0.0-beta.vsix" style="color:black;"><u>qt-vs-addin-msvc2015-2.0.0-beta.vsix</u></a></li>
+<li class="list-group-item"><a href = "/Downloads/teraterm-4.90.exe" style="color:black;"><u>teraterm-4.90.exe</u></a></li>
+<li class="list-group-item"><a  href = "https://www.qt.io/download-open-source/#section-2" style="color:black;"><u>Qt Download Link<u></a></li>
+<li class="list-group-item"><a  href = "/Downloads/EaComTool.zip" style="color:black;"><u>EaComTool<u></a></li>
+<li class="list-group-item"><a  href = "/Downloads/EaComTool_UWP.zip" style="color:black;"><u>UartServiceLib<u></a></li>
 </ul>
 </div><!--row1 col1-->
-<div class="col-md-offset-1"  ><!--row 1  col2-->
-  <div style="margin-left:300px ;margin-right:300px" >
+<div class="col-lg-6"  ><!--row 1  col2-->
+  <div  >
   <h3 >排班表</h3>
   <h4 id="DateDisp"></h4>
   <h4 id="WeekDisp"></h4>
@@ -36,7 +40,7 @@
               <th>洗碗</th>
               <th>洗碗</th>
               <th>煮饭</th>
-              <th>外卖</th>
+              <th>休息</th>
           </tr>
       </thead>
       <tbody>
@@ -49,7 +53,7 @@
       </tbody>
   </table>
 </div>
-    <div style="margin-left:300px ;margin-right:300px">
+    <div >
     <h4>Chart Room</h4>
     <h4 id="ConnectUSer"></h4>
     <div id="ChartRoom" style= "overflow-y:auto; overflow-x:auto;  height:400px; background:#FFF5E5">
@@ -62,6 +66,29 @@
     </div>
     </div>
     </div><!--row1 col2-->
+	<div class="col-lg-2">
+		<label>Notes:</label>
+		<div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" 
+                href="#collapseOne">
+                添加打印机步骤
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <ul>
+				<li>运行 run.exe</li>
+				<li>输入"\\shafs01"</li>
+				<li>输入用户名密码 thorlabs\ 开头</li>
+				<li>选择一台打印机 右击 connect</li>
+				</ul>
+            </div>
+        </div>
+    </div>
+	</div><!--row 1 col3 -->
  </div><!-- Row1-->
 
     <!--
@@ -161,6 +188,7 @@
             $('#Row1').children('td').eq(0).text(obj.col1);
             $('#Row1').children('td').eq(1).text(obj.col2);
             $('#Row1').children('td').eq(2).text(obj.col3);
+			$('#Row1').children('td').eq(3).text(obj.col4);
             $('#DateDisp').text("当前日期： "+obj.CurrentDate);
             $('#WeekDisp').text("当前周数： "+obj.CurrentWeek);
         });

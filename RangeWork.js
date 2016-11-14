@@ -8,7 +8,34 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var multer  = require('multer');
 var urlencodeParser = bodyParser.urlencoded({extended: true});
+var nodemailer = require("nodemailer");
+var smtpTransport = require('nodemailer-smtp-transport');
 
+var config_mail = {
+    service: '163',
+	port:'25',
+    auth: {
+        user: '18621300389@163.com',
+        pass: 'SpaceX2016'
+    },
+    tls: {rejectUnauthorized: false},
+	debug:true
+};
+var transporter = nodemailer.createTransport(smtpTransport(config_mail));
+var mailOptions = {
+  from: "18621300389@163.com", 
+  to: "ychen@thorlabs.com", 
+  subject: "Hello world", 
+  html: "<b>thanks a for visiting!</b>"
+}
+transporter.sendMail(mailOptions, function(error, info){
+  if(error){
+    console.log(error);
+  }else{
+    console.log("Message sent: " + info.response);
+  }
+  //smtpTransport.close(); // 如果没用，关闭连接池
+});
 
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -34,17 +61,17 @@ app.use(cookieParser());
 app.use(express.static(__dirname + '/'));
 app.use(bodyParser.urlencoded({extended:false}));
 
-var Persons=['York','Jetty','Eason'];
+var Persons=['Eason','Jetty','York','Yfu'];
 var Startdate = new Date();
-Startdate.setFullYear(2016,8,4);//2016.9.4
+Startdate.setFullYear(2016,9,9);//2016.10.9
 
 app.get('/GetRangement',function(req,res){
     console.log("visit date: "+ new Date());
    // var curDate = new Date();
-    var start = moment("2016-09-04").week();
+    var start = moment("2016-10-09").week();
     var curWeek = moment().week();
     var durWeek =curWeek- start;
-    var tmp = durWeek%3;
+    var tmp = durWeek%4;
     var tmpPerson=Persons.concat();
     for(var i=0;i<tmp;i++)
     {
@@ -54,9 +81,9 @@ app.get('/GetRangement',function(req,res){
             tmpPerson[j]=tmpPerson[j-1];
         }
         tmpPerson[0]=last;
-        console.log(tmpPerson);
+        //console.log(tmpPerson);
     }
-   var obj={'CurrentDate':moment().format('YYYY-MM-DD'),'CurrentWeek':curWeek,'col1':tmpPerson[0],'col2':tmpPerson[1],'col3':tmpPerson[2]};
+   var obj={'CurrentDate':moment().format('YYYY-MM-DD'),'CurrentWeek':curWeek,'col1':tmpPerson[0],'col2':tmpPerson[1],'col3':tmpPerson[2],'col4':tmpPerson[3]};
   res.end(JSON.stringify(obj));
 });
 function getClientIp(req) {
